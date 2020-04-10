@@ -1,12 +1,31 @@
-const { hash } = require('bcryptjs');
+const { hash, compare } = require('bcryptjs');
 const sign = require('jsonwebtoken/sign');
 const { UserInputError } = require('apollo-server');
 
 const User = require('../../models/User');
-const { validateRegisterInput } = require('../../utilities/validators');
+const {
+  validateRegisterInput,
+  validateLoginInput,
+} = require('../../utilities/validators');
+
+const generateToken = (user) => {
+  return sign(
+    {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: '1h',
+    }
+  );
+};
 
 module.exports = {
   Mutation: {
+    // REGISTER MUTATION
+
     register: async (_, args, context, info) => {
       let {
         registerInput: { username, password, confirmPassword, email },
@@ -44,20 +63,37 @@ module.exports = {
 
       const res = await newUser.save();
 
-      const token = sign(
-        {
-          id: res.id,
-          email,
-          username,
-        },
-        process.env.SECRET_KEY,
-        {
-          expiresIn: '1h',
-        }
-      );
+      const token = generateToken(res);
+
       return {
         ...res._doc,
         id: res.id,
+        token,
+      };
+    },
+
+    // LOGIN MUTATION
+
+    login: async (_, { loginInput }) => {
+      const { username, password } = loginInput;
+      const { errors, valid } = validateLoginInput(username, password);
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        errors.general = 'User not found';
+        throw new UserInputError('User not found', { errors });
+      }
+      const match = await compare(password, user.password);
+      if (!match) {
+        errors.general = 'Wrong credentials';
+        throw new UserInputError('Wrong credentials', { errors });
+      }
+
+      const token = generateToken(user);
+
+      return {
+        ...user._doc,
+        id: user.id,
         token,
       };
     },
