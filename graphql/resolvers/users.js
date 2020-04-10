@@ -77,6 +77,11 @@ module.exports = {
     login: async (_, { loginInput }) => {
       const { username, password } = loginInput;
       const { errors, valid } = validateLoginInput(username, password);
+
+      if (!valid) {
+        throw new UserInputError('Errors', { errors });
+      }
+
       const user = await User.findOne({ username });
 
       if (!user) {
