@@ -42,12 +42,21 @@ module.exports = {
       }
 
       // Make sure user doesn't already exists
-      const user = await User.findOne({ username });
+      const verifyUsername = await User.findOne({ username });
+      const verifyEmail = await User.findOne({ email });
 
-      if (user) {
+      if (verifyUsername) {
         throw new UserInputError('Username is taken', {
           errors: {
             username: 'This username is already taken',
+          },
+        });
+      }
+
+      if (verifyEmail) {
+        throw new UserInputError('email is taken', {
+          errors: {
+            email: 'This email is already taken',
           },
         });
       }
