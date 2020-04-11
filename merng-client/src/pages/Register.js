@@ -1,11 +1,11 @@
 import React, { memo, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Button } from 'semantic-ui-react';
-import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 import { useForm } from '../hooks/useForm';
 import { AuthContext } from '../context/authContext';
+import { REGISTER_USER } from '../graphql/user';
 
 function Register() {
   const history = useHistory();
@@ -106,27 +106,4 @@ function Register() {
   );
 }
 
-const REGISTER_USER = gql`
-  mutation register(
-    $username: String!
-    $email: String!
-    $password: String!
-    $confirmPassword: String!
-  ) {
-    register(
-      registerInput: {
-        username: $username
-        email: $email
-        password: $password
-        confirmPassword: $confirmPassword
-      }
-    ) {
-      id
-      email
-      username
-      createdAt
-      token
-    }
-  }
-`;
 export default memo(Register);

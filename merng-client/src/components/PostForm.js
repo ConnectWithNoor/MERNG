@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { Form, Button, Card } from 'semantic-ui-react';
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
 import { useForm } from '../hooks/useForm';
+import CREATE_POST_MUTATION from '../graphql/posts';
 
 function PostForm() {
   const initialState = { body: '' };
@@ -13,8 +13,8 @@ function PostForm() {
   );
 
   const [createPost, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
-    update(_, result) {
-      console.log(result);
+    update(proxy, result) {
+      proxy.readQuery({});
       values.body = '';
     },
     onError(err) {
@@ -48,29 +48,5 @@ function PostForm() {
     </Form>
   );
 }
-
-const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!) {
-    createPost(body: $body) {
-      id
-      body
-      createdAt
-      username
-      likeCount
-      likes {
-        id
-        username
-        createdAt
-      }
-      commentCount
-      comments {
-        id
-        body
-        username
-        createdAt
-      }
-    }
-  }
-`;
 
 export default memo(PostForm);
