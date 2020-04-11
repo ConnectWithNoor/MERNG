@@ -21,7 +21,7 @@ const AuthContext = createContext({
   logout: () => {},
 });
 
-function AuthReducer(state = {}, action) {
+function AuthReducer(state = initialState, action) {
   switch (action.type) {
     case 'LOGIN':
       return {
@@ -52,10 +52,7 @@ function AuthContextProvider(props) {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user: state.user, login, logout }}
-      {...props}
-    >
+    <AuthContext.Provider value={{ user: state.user, login, logout }}>
       {props.children}
     </AuthContext.Provider>
   );
