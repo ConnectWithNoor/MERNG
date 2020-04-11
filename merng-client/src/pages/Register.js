@@ -1,13 +1,15 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Button } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 import { useForm } from '../hooks/useForm';
+import { AuthContext } from '../context/authContext';
 
 function Register() {
   const history = useHistory();
+  const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
 
   const initialState = {
@@ -26,6 +28,7 @@ function Register() {
     errorPolicy: 'all',
     update: (_, result) => {
       // window.location.href = '/';
+      context.login(result.data.login);
       history.push('/');
     },
     onError: (err) => {

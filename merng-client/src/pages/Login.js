@@ -1,13 +1,15 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Button } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 import { useForm } from '../hooks/useForm';
+import { AuthContext } from '../context/authContext';
 
 function Login() {
   const history = useHistory();
+  const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
 
   const initialState = {
@@ -23,6 +25,7 @@ function Login() {
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     errorPolicy: 'all',
     update: (_, result) => {
+      context.login(result.data.login);
       // window.location.href = '/';
       history.push('/');
     },
