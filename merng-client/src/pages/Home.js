@@ -4,7 +4,7 @@ import { Grid } from 'semantic-ui-react';
 
 import PostCard from '../components/PostCard';
 import PostForm from '../components/PostForm';
-import FETCH_POSTS_QUERY from '../graphql/posts';
+import { FETCH_POSTS_QUERY } from '../graphql/posts';
 
 import { AuthContext } from '../context/authContext';
 
