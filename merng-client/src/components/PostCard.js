@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Card, Icon, Label, Image, Button } from 'semantic-ui-react';
-import Link from 'react-router-dom/Link';
+import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
