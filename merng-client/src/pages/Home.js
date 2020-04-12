@@ -4,6 +4,7 @@ import { Grid, Transition } from 'semantic-ui-react';
 
 import PostCard from '../components/PostCard';
 import PostForm from '../components/PostForm';
+import Loader from '../components/Loader';
 import { FETCH_POSTS_QUERY } from '../graphql/posts';
 
 import { AuthContext } from '../context/authContext';
@@ -13,7 +14,7 @@ function Home() {
   const { loading, data } = useQuery(FETCH_POSTS_QUERY);
 
   const PostsMarkup = loading ? (
-    <h1>Loading Posts...</h1>
+    <Loader />
   ) : (
     <Transition.Group duration={1000} size="huge">
       {data?.getPosts &&

@@ -7,16 +7,19 @@ import {
   Grid,
   Image,
   Card,
-  Divider,
   Button,
   Icon,
   Label,
+  Divider,
+  Message,
 } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 import { FETCH_POST_QUERY } from '../graphql/posts';
 import LikeButton from '../components/LikeButton';
 import DeleteButton from '../components/DeleteButton';
 import { AuthContext } from '../context/authContext';
+import Loader from '../components/Loader';
 dayjs.extend(relativeTime);
 
 function SinglePost() {
@@ -41,9 +44,17 @@ function SinglePost() {
 
   const postMarkup = !post ? (
     loading ? (
-      <p>loading post...</p>
+      <Loader />
     ) : (
-      <p>'Something went wrong</p>
+      <Message
+        color="red"
+        as={Link}
+        to="/"
+        style={{ display: 'inline-block', width: '100%' }}
+      >
+        <Message.Header>Something went wrong</Message.Header>
+        <Message.Item>Click to go to homepage</Message.Item>
+      </Message>
     )
   ) : (
     <Grid>
@@ -62,7 +73,7 @@ function SinglePost() {
               <Card.Meta>{dayjs(post.createdAt).fromNow()}</Card.Meta>
               <Card.Description>{post.body}</Card.Description>
             </Card.Content>
-            <hr />
+            <Divider horizontal />
             <Card.Content extra>
               <LikeButton
                 user={user}
