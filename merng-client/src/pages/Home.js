@@ -1,6 +1,6 @@
 import React, { memo, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Transition } from 'semantic-ui-react';
 
 import PostCard from '../components/PostCard';
 import PostForm from '../components/PostForm';
@@ -15,12 +15,14 @@ function Home() {
   const PostsMarkup = loading ? (
     <h1>Loading Posts...</h1>
   ) : (
-    data?.getPosts &&
-    data?.getPosts.map((post) => (
-      <Grid.Column key={post.id} style={{ marginBottom: '2rem' }}>
-        <PostCard post={post} />
-      </Grid.Column>
-    ))
+    <Transition.Group duration={1000} size="huge">
+      {data?.getPosts &&
+        data?.getPosts.map((post) => (
+          <Grid.Column key={post.id} style={{ marginBottom: '2rem' }}>
+            <PostCard post={post} />
+          </Grid.Column>
+        ))}
+    </Transition.Group>
   );
 
   return (

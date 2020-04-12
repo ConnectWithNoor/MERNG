@@ -1,12 +1,17 @@
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import { Card, Icon, Label, Image, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
+import { AuthContext } from '../context/authContext';
+import LikeButton from './LikeButton';
+
 dayjs.extend(relativeTime);
 
 function PostCard({ post }) {
+  const { user } = useContext(AuthContext);
+
   const {
     body,
     createdAt,
@@ -17,12 +22,8 @@ function PostCard({ post }) {
     likes,
   } = post;
 
-  const likePost = () => {
-    console.log('post like');
-  };
-
-  const commentOnPost = () => {
-    console.log('commentPost');
+  const handleDelete = (id) => {
+    console.log('called delete', id);
   };
 
   return (
@@ -40,15 +41,8 @@ function PostCard({ post }) {
         <Card.Description>{body}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Button as="div" labelPosition="right" onClick={likePost}>
-          <Button color="teal" basic>
-            <Icon name="heart" />
-          </Button>
-          <Label basic color="teal" pointing="left">
-            {likeCount}
-          </Label>
-        </Button>
-        <Button as="div" labelPosition="right" onClick={commentOnPost}>
+        <LikeButton user={user} post={{ id, likes, likeCount }} />
+        <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
           <Button color="blue" basic>
             <Icon name="comments" />
           </Button>
@@ -56,6 +50,17 @@ function PostCard({ post }) {
             {commentCount}
           </Label>
         </Button>
+        {user && user.username === username && (
+          <Button
+            as="div"
+            color="red"
+            floated="right"
+            onClick={() => handleDelete(id)}
+            basic
+          >
+            <Icon name="trash" style={{ margin: 0 }} />
+          </Button>
+        )}
       </Card.Content>
     </Card>
   );

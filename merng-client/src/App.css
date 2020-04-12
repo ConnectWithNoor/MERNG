@@ -15,3 +15,13 @@
     max-width: 100%;
   }
 }
+
+.ui.teal.button:focus,
+.ui.teal.buttons .button:focus {
+  background-color: #00b5ad;
+}
+
+.ui.teal.button:hover,
+.ui.teal.buttons .button:hover {
+  background-color: #01a79e;
+}
