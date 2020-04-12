@@ -45,7 +45,7 @@ function LikeButton({ post: { id, likes, likeCount }, user }) {
 
   return (
     <Popup
-      content="Like Post"
+      content={liked ? 'Unline' : 'Like'}
       inverted
       trigger={
         <Button
