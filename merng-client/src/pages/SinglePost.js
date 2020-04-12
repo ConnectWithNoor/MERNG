@@ -87,7 +87,7 @@ function SinglePost() {
                 <Button basic color="blue">
                   <Icon name="comments" />
                 </Button>
-                <Label basic color="blue" labelPosition="left">
+                <Label basic color="blue">
                   {post.commentCount}
                 </Label>
               </Button>
@@ -96,6 +96,18 @@ function SinglePost() {
               )}
             </Card.Content>
           </Card>
+          {post.comments.map((comment) => (
+            <Card fluid key={comment.id}>
+              <Card.Content>
+                {user && user.username === comment.username && (
+                  <DeleteButton postId={post.id} commentId={comment.id} />
+                )}
+                <Card.Header>{comment.username}</Card.Header>
+                <Card.Meta>{dayjs(comment.createdAt).fromNow()}</Card.Meta>
+                <Card.Description>{comment.body}</Card.Description>
+              </Card.Content>
+            </Card>
+          ))}
         </Grid.Column>
       </Grid.Row>
     </Grid>

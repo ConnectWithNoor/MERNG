@@ -1,5 +1,12 @@
 import React, { memo, useContext } from 'react';
-import { Card, Icon, Label, Image, Button } from 'semantic-ui-react';
+import {
+  Card,
+  Icon,
+  Label,
+  Image,
+  Button,
+  Transition,
+} from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -47,7 +54,11 @@ function PostCard({ post }) {
             {commentCount}
           </Label>
         </Button>
-        {user && user.username === username && <DeleteButton postId={id} />}
+        {user && user.username === username && (
+          <Transition.Group duration={1000} size="huge">
+            <DeleteButton postId={id} />
+          </Transition.Group>
+        )}
       </Card.Content>
     </Card>
   );

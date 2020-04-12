@@ -67,6 +67,12 @@ export const CREATE_POST_MUTATION = gql`
   }
 `;
 
+export const DELETE_POST_MUTATION = gql`
+  mutation deletePost($postId: ID!) {
+    deletePost(postId: $postId)
+  }
+`;
+
 export const LIKE_POST_MUTATION = gql`
   mutation likePost($postId: ID!) {
     likePost(postId: $postId) {
@@ -80,8 +86,17 @@ export const LIKE_POST_MUTATION = gql`
   }
 `;
 
-export const DELETE_POST_MUTATION = gql`
-  mutation deletePost($postId: ID!) {
-    deletePost(postId: $postId)
+export const DELETE_COMMENT_MUTATION = gql`
+  mutation deleteComment($postId: ID!, $commentId: ID!) {
+    deleteComment(postId: $postId, commentId: $commentId) {
+      id
+      comments {
+        id
+        username
+        createdAt
+        body
+      }
+      commentCount
+    }
   }
 `;
