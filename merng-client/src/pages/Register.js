@@ -1,6 +1,6 @@
 import React, { memo, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Form, Button } from 'semantic-ui-react';
+import { Form, Button, Message } from 'semantic-ui-react';
 import { useMutation } from '@apollo/react-hooks';
 
 import { useForm } from '../hooks/useForm';
@@ -94,13 +94,13 @@ function Register() {
         </Button>
       </Form>
       {Object.keys(errors).length > 0 && (
-        <div className="ui error message">
+        <Message floating color="red">
           <ui classname="list">
             {Object.values(errors).map((value) => (
               <li key={value}>{value}</li>
             ))}
           </ui>
-        </div>
+        </Message>
       )}
     </div>
   );
