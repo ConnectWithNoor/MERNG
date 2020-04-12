@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { Icon, Label, Button } from 'semantic-ui-react';
+import { Icon, Label, Button, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -44,17 +44,23 @@ function LikeButton({ post: { id, likes, likeCount }, user }) {
   );
 
   return (
-    <Button
-      as="div"
-      labelPosition="right"
-      onClick={likePost}
-      className={loading ? 'loading' : ''}
-    >
-      {likeButtonMarkup}
-      <Label basic color="teal" pointing="left">
-        {likeCount}
-      </Label>
-    </Button>
+    <Popup
+      content="Like Post"
+      inverted
+      trigger={
+        <Button
+          as="div"
+          labelPosition="right"
+          onClick={likePost}
+          className={loading ? 'loading' : ''}
+        >
+          {likeButtonMarkup}
+          <Label basic color="teal" pointing="left">
+            {likeCount}
+          </Label>
+        </Button>
+      }
+    />
   );
 }
 

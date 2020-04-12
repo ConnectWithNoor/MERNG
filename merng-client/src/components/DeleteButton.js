@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { Button, Icon, Confirm } from 'semantic-ui-react';
+import { Button, Icon, Confirm, Popup } from 'semantic-ui-react';
 
 import {
   DELETE_POST_MUTATION,
@@ -40,15 +40,21 @@ function DeleteButton({ postId, callback = () => {}, commentId }) {
 
   return (
     <>
-      <Button
-        as="div"
-        color="red"
-        floated="right"
-        onClick={() => setConfrimOpen(true)}
-        basic
-      >
-        <Icon name="trash" style={{ margin: 0 }} />
-      </Button>
+      <Popup
+        content={!commentId ? 'Delete Post' : 'Delete Comment'}
+        inverted
+        trigger={
+          <Button
+            as="div"
+            color="red"
+            floated="right"
+            onClick={() => setConfrimOpen(true)}
+            basic
+          >
+            <Icon name="trash" style={{ margin: 0 }} />
+          </Button>
+        }
+      />
       <Confirm
         open={confirmOpen}
         onCancel={() => setConfrimOpen(false)}

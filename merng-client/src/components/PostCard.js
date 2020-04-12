@@ -6,6 +6,7 @@ import {
   Image,
   Button,
   Transition,
+  Popup,
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -33,10 +34,15 @@ function PostCard({ post }) {
   return (
     <Card fluid>
       <Card.Content>
-        <Image
-          floated="right"
-          size="mini"
-          src="https://react.semantic-ui.com/images/avatar/large/molly.png"
+        <Popup
+          content={`username: ${post.username}`}
+          trigger={
+            <Image
+              floated="right"
+              size="mini"
+              src="https://react.semantic-ui.com/images/avatar/large/molly.png"
+            />
+          }
         />
         <Card.Header>{username}</Card.Header>
         <Card.Meta as={Link} to={`/posts/${id}`}>
@@ -46,14 +52,20 @@ function PostCard({ post }) {
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={user} post={{ id, likes, likeCount }} />
-        <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
-          <Button color="blue" basic>
-            <Icon name="comments" />
-          </Button>
-          <Label basic color="blue" pointing="left">
-            {commentCount}
-          </Label>
-        </Button>
+        <Popup
+          content="Comment on post"
+          inverted
+          trigger={
+            <Button labelPosition="right" as={Link} to={`/posts/${id}`}>
+              <Button color="blue" basic>
+                <Icon name="comments" />
+              </Button>
+              <Label basic color="blue" pointing="left">
+                {commentCount}
+              </Label>
+            </Button>
+          }
+        />
         {user && user.username === username && (
           <Transition.Group duration={1000} size="huge">
             <DeleteButton postId={id} />

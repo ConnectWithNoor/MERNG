@@ -13,6 +13,7 @@ import {
   Divider,
   Message,
   Form,
+  Popup,
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
@@ -77,10 +78,16 @@ function SinglePost() {
     <Grid>
       <Grid.Row>
         <Grid.Column width={2}>
-          <Image
-            src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-            size="small"
-            float="right"
+          <Popup
+            content={`username: ${post.username}`}
+            inverted
+            trigger={
+              <Image
+                src="https://react.semantic-ui.com/images/avatar/large/molly.png"
+                size="small"
+                float="right"
+              />
+            }
           />
         </Grid.Column>
         <Grid.Column width={10}>
@@ -100,14 +107,20 @@ function SinglePost() {
                   likes: post.likes,
                 }}
               />
-              <Button as="div" labelPosition="right">
-                <Button basic color="blue">
-                  <Icon name="comments" />
-                </Button>
-                <Label basic color="blue">
-                  {post.commentCount}
-                </Label>
-              </Button>
+              <Popup
+                content={'Comment on post'}
+                inverted
+                trigger={
+                  <Button as="div" labelPosition="right">
+                    <Button basic color="blue">
+                      <Icon name="comments" />
+                    </Button>
+                    <Label basic color="blue">
+                      {post.commentCount}
+                    </Label>
+                  </Button>
+                }
+              />
               {user && user.username === post.username && (
                 <DeleteButton postId={post.id} callback={deletePostCallback} />
               )}
