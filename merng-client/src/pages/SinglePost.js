@@ -1,6 +1,6 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useState, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {
@@ -12,10 +12,11 @@ import {
   Label,
   Divider,
   Message,
+  Form,
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-import { FETCH_POST_QUERY } from '../graphql/posts';
+import { FETCH_POST_QUERY, SUBMIT_COMMENT_MUTATION } from '../graphql/posts';
 import LikeButton from '../components/LikeButton';
 import DeleteButton from '../components/DeleteButton';
 import { AuthContext } from '../context/authContext';
@@ -23,20 +24,36 @@ import Loader from '../components/Loader';
 dayjs.extend(relativeTime);
 
 function SinglePost() {
-  const { postId } = useParams();
+  const [comment, setComment] = useState('');
   const { user } = useContext(AuthContext);
+  const commentInputRef = useRef(null);
+
   const history = useHistory();
+  const { postId } = useParams();
+
   const { data, loading } = useQuery(FETCH_POST_QUERY, {
     variables: {
       postId,
     },
   });
-
   const post = data?.getPost;
 
-  const handleComment = () => {
-    console.log('comment');
-  };
+  const [submitComment, { loading: loadingComment }] = useMutation(
+    SUBMIT_COMMENT_MUTATION,
+    {
+      variables: {
+        postId,
+        body: comment,
+      },
+      update() {
+        setComment('');
+        commentInputRef.current.blur();
+      },
+      onError(err) {
+        console.log(err);
+      },
+    }
+  );
 
   const deletePostCallback = () => {
     history.push('/');
@@ -83,7 +100,7 @@ function SinglePost() {
                   likes: post.likes,
                 }}
               />
-              <Button as="div" labelPosition="right" onClick={handleComment}>
+              <Button as="div" labelPosition="right">
                 <Button basic color="blue">
                   <Icon name="comments" />
                 </Button>
@@ -96,6 +113,33 @@ function SinglePost() {
               )}
             </Card.Content>
           </Card>
+          {user && (
+            <Card fluid>
+              <Card.Content>
+                <p>Post a comment</p>
+                <Form className={loadingComment && 'loading'}>
+                  <div className={`ui action input fluid`}>
+                    <input
+                      type="text"
+                      placeholder="Comment.."
+                      name="comment"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      ref={commentInputRef}
+                    />
+                    <button
+                      type="submit"
+                      className="ui button teal"
+                      disabled={comment.trim() === ''}
+                      onClick={submitComment}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </Form>
+              </Card.Content>
+            </Card>
+          )}
           {post.comments.map((comment) => (
             <Card fluid key={comment.id}>
               <Card.Content>
