@@ -6,6 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { AuthContext } from '../context/authContext';
 import LikeButton from './LikeButton';
+import DeleteButton from './DeleteButton';
 
 dayjs.extend(relativeTime);
 
@@ -21,10 +22,6 @@ function PostCard({ post }) {
     commentCount,
     likes,
   } = post;
-
-  const handleDelete = (id) => {
-    console.log('called delete', id);
-  };
 
   return (
     <Card fluid>
@@ -50,17 +47,7 @@ function PostCard({ post }) {
             {commentCount}
           </Label>
         </Button>
-        {user && user.username === username && (
-          <Button
-            as="div"
-            color="red"
-            floated="right"
-            onClick={() => handleDelete(id)}
-            basic
-          >
-            <Icon name="trash" style={{ margin: 0 }} />
-          </Button>
-        )}
+        {user && user.username === username && <DeleteButton postId={id} />}
       </Card.Content>
     </Card>
   );
