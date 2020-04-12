@@ -1,5 +1,5 @@
 import React, { memo, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -22,6 +22,7 @@ dayjs.extend(relativeTime);
 function SinglePost() {
   const { postId } = useParams();
   const { user } = useContext(AuthContext);
+  const history = useHistory();
   const { data, loading } = useQuery(FETCH_POST_QUERY, {
     variables: {
       postId,
@@ -32,6 +33,10 @@ function SinglePost() {
 
   const handleComment = () => {
     console.log('comment');
+  };
+
+  const deletePostCallback = () => {
+    history.push('/');
   };
 
   const postMarkup = !post ? (
@@ -76,7 +81,7 @@ function SinglePost() {
                 </Label>
               </Button>
               {user && user.username === post.username && (
-                <DeleteButton postId={post.id} />
+                <DeleteButton postId={post.id} callback={deletePostCallback} />
               )}
             </Card.Content>
           </Card>
