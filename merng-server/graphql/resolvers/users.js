@@ -1,7 +1,6 @@
 const { hash, compare } = require('bcryptjs');
 const sign = require('jsonwebtoken/sign');
 const { UserInputError } = require('apollo-server');
-const { SECRET_KEY } = require('../../SECTRET_ENV');
 
 const User = require('../../models/User');
 const {
@@ -16,7 +15,7 @@ const generateToken = (user) => {
       email: user.email,
       username: user.username,
     },
-    SECRET_KEY,
+    process.env.SECRET_KEY,
     {
       expiresIn: '1h',
     }

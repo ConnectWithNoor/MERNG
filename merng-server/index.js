@@ -1,8 +1,11 @@
 const { ApolloServer } = require('apollo-server');
 const mongoose = require('mongoose');
-const { MONGODB } = require('./SECTRET_ENV');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 const server = new ApolloServer({
   typeDefs,
@@ -11,7 +14,7 @@ const server = new ApolloServer({
 });
 
 mongoose
-  .connect(MONGODB, {
+  .connect(process.env.MONGODB, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })
